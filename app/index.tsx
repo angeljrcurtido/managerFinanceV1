@@ -1,148 +1,40 @@
-import React, { useEffect, useState } from "react";
-import {
-  ImageBackground,
-  ScrollView,
-  View,
-  Pressable,
-  Text,
-  Image,
-  ActivityIndicator,
-} from "react-native";
-import { useRouter } from "expo-router";
+// app/index.tsx
+import React from 'react';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Dashboard from "./Ingresos/components/Dashboard";
-import DashboardEgresos from "./Egresos/components/Dashboard";
-
-export default function Index() {
+export default function IndexScreen() {
   const router = useRouter();
-  const [cargando, setCargando] = useState(true);
-
-  useEffect(() => {
-    const verificarSesion = async () => {
-      const userId = await AsyncStorage.getItem("usuarioId");
-
-      if (!userId) {
-        // Si no hay sesión iniciada, redirigimos al login
-        router.replace("/Usuario/Login");
-      } else {
-        setCargando(false);
-      }
-    };
-
-    verificarSesion();
-  }, []);
-
-  if (cargando) {
-    return (
-      <View className="flex-1 justify-center items-center bg-white">
-        <ActivityIndicator size="large" color="#3498db" />
-        <Text className="mt-4 text-gray-500">Cargando...</Text>
-      </View>
-    );
-  }
 
   return (
-    <ImageBackground
-      source={require("../assets/fondobg.png")}
-      style={{ flex: 1 }}
-      resizeMode="cover"
-    >
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          paddingVertical: 10,
-          paddingHorizontal: 16,
-        }}
-        showsVerticalScrollIndicator={false}
+    <View className="flex-1 justify-center items-center bg-white px-6">
+
+      {/* Título */}
+      <Text className="text-3xl font-extrabold text-blue-800 mb-4">
+        RegistroMovimientos
+      </Text>
+      <Text className="text-base text-gray-600 mb-10 text-center">
+        Administra tus ingresos y egresos diarios de forma simple.
+      </Text>
+
+      {/* Botón: Registrar Ingreso */}
+      <TouchableOpacity
+        onPress={() => router.push('Ingresos/CrearIngreso')}
+        className="w-full bg-blue-600 flex-row items-center justify-center py-4 rounded-xl mb-4"
       >
-        <Image
-          source={require("../assets/logotipo.jpg")}
-          style={{ width: 128, height: 128, marginBottom: 16 }}
-          className="rounded-full"
-          resizeMode="contain"
-        />
+        <MaterialIcons name="trending-up" size={22} color="white" className="mr-2" />
+        <Text className="text-white font-semibold text-base">Registrar Ingreso</Text>
+      </TouchableOpacity>
 
-        <Text
-          style={{
-            fontSize: 32,
-            color: "white",
-            fontWeight: "bold",
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Bienvenido a tu Dashboard Financiero
-        </Text>
-
-        <Pressable
-          onPress={async () => {
-            await AsyncStorage.removeItem("usuarioId");
-            router.replace("/Usuario/Login");
-          }}
-          style={{
-            backgroundColor: "#34495e",
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 8,
-            marginBottom: 16,
-          }}
-        >
-          <Text style={{ color: "white", fontWeight: "bold", fontSize: 16 }}>
-            🚪 Cerrar sesión
-          </Text>
-        </Pressable>
-      
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            width: "100%",
-            marginBottom: 16,
-          }}
-        >
-          <Pressable
-            style={{
-              backgroundColor: "#2ecc71",
-              paddingVertical: 12,
-              paddingHorizontal: 24,
-              borderRadius: 8,
-              marginRight: 8,
-            }}
-            onPress={() => router.push("/Ingresos")}
-          >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Ingresos</Text>
-          </Pressable>
-          <Pressable
-            style={{
-              backgroundColor: "#e74c3c",
-              paddingVertical: 12,
-              paddingHorizontal: 24,
-              borderRadius: 8,
-              marginLeft: 8,
-            }}
-            onPress={() => router.push("/Egresos")}
-          >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Egresos</Text>
-          </Pressable>
-        </View>
-
-        <View style={{ width: "100%", marginBottom: 24 }}>
-          <Text className="text-[#2ecc71] text-3xl font-bold text-center">
-            Resumen Ingresos
-          </Text>
-          <Dashboard />
-        </View>
-
-        <View style={{ width: "100%" }}>
-          <Text className="text-[#e74c3c] text-3xl font-bold text-center">
-            Resumen Egresos
-          </Text>
-          <DashboardEgresos />
-        </View>
-      </ScrollView>
-    </ImageBackground>
+      {/* Botón: Registrar Egreso */}
+      <TouchableOpacity
+        onPress={() => router.push('Egresos/CrearEgresos')}
+        className="w-full bg-red-600 flex-row items-center justify-center py-4 rounded-xl"
+      >
+        <MaterialIcons name="trending-down" size={22} color="white" className="mr-2" />
+        <Text className="text-white font-semibold text-base">Registrar Egreso</Text>
+      </TouchableOpacity>
+    </View>
   );
 }

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "managerFinance",
-    "slug": "managerFinance",
+    "name": "MiAppIngresos",
+    "slug": "MiAppIngresos",  
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.angeljrcurtido.managerFinance"
+      "package": "com.angeljrcurtido.MiAppIngresos"
     },
     "web": {
       "bundler": "metro",
@@ -33,6 +33,29 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-2555525398874365~2392057136",
+          "androidAppId": "ca-app-pub-2555525398874365~2392057136"
+        }
+      ],
+      [
+        "expo-sqlite",
+        {
+          "enableFTS": true,
+          "useSQLCipher": true,
+          "android": {
+            "enableFTS": false,
+            "useSQLCipher": false
+          },
+          "ios": {
+            "customBuildFlags": [
+              "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_SNAPSHOT=1"
+            ]
+          }
+        }
       ]
     ],
     "experiments": {
@@ -43,8 +66,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "d0ef65ac-91ea-4c9d-900d-7c722521bfe0"
+        "projectId": "4c19177c-befb-4acc-81f1-70243502c351"
       }
-    }
+    },
+    "owner": "angeljrcurtido"
   }
 }
