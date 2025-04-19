@@ -61,9 +61,9 @@ Join our community of developers creating universal apps.
 > - Certificados (keystore) configurados en Expo ► **Build Credentials**  
 > - Variables de entorno necesarias definidas en **eas.json** o en el Dashboard
 
+
 ### 1. Instalación de dependencias
 
-```bash
 git clone https://github.com/angeljrcurtido/managerFinanceV1.git
 cd managerFinanceV1
 yarn           # o  npm install
@@ -78,22 +78,17 @@ Perfil	Uso principal	Tipo de paquete
 3.production |	Google Play / producción estable	AAB (Play Bundle)
 
 ### 3. Comandos principales
-===============
+
 Objetivo	Comando
-===============
 AAB de producción (recomendado para Play Store):	eas build --platform android --profile production
 APK para testing rápido (profile preview):	eas build --platform android --profile preview --artifact-type apk
 APK local sin subir a la nube
 (requiere Android SDK + NDK instalados):	eas build --platform android --profile preview --local --output-name app-preview.apk
 Cliente dev con live‑reload:	eas build -p android --profile development
 Instala el APK en tu dispositivo y luego npx expo start --dev-client
-=======================================================
+
 Nota: sin especificar --artifact-type, EAS genera:
 AAB en perfiles de distribución (preview, production)
 APK en perfiles development
-=======================================================
 
-4. Descarga e instalación
-Cuando la compilación termine, EAS mostrará la URL del artefacto en consola y en el dashboard de Expo.
-Para instalar en un dispositivo físico: adb install app-preview.apk
 
