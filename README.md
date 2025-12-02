@@ -13,7 +13,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 2. Start the app
 
    ```bash
-    npx expo start
+   npx expo start
    ```
 
 In the output, you'll find options to open the app in a
@@ -48,47 +48,3 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-
-
-## 📦 Cómo generar los paquetes Android (AAB / APK)
-
-> **Requisitos previos**
->
-> - Node ≥ 18  
-> - Yarn o NPM instalado  
-> - Cuenta en [Expo](https://expo.dev) y haber iniciado sesión (`npx expo login`)  
-> - EAS CLI global (`npm i -g eas-cli`)  
-> - Certificados (keystore) configurados en Expo ► **Build Credentials**  
-> - Variables de entorno necesarias definidas en **eas.json** o en el Dashboard
-
-
-### 1. Instalación de dependencias
-
-git clone https://github.com/angeljrcurtido/managerFinanceV1.git
-cd managerFinanceV1
-yarn           # o  npm install
-
-## 2. Seleccionar el perfil de compilación
-
-El archivo eas.json contiene tres perfiles:
-
-Perfil	Uso principal	Tipo de paquete
-1.development|	Cliente dev + instalación interna |	APK
-2.preview	 |Beta testers / QA (interno)	APK
-3.production |	Google Play / producción estable	AAB (Play Bundle)
-
-### 3. Comandos principales
-
-Objetivo	Comando
-AAB de producción (recomendado para Play Store):	eas build --platform android --profile production
-APK para testing rápido (profile preview):	eas build --platform android --profile preview --artifact-type apk
-APK local sin subir a la nube
-(requiere Android SDK + NDK instalados):	eas build --platform android --profile preview --local --output-name app-preview.apk
-Cliente dev con live‑reload:	eas build -p android --profile development
-Instala el APK en tu dispositivo y luego npx expo start --dev-client
-
-Nota: sin especificar --artifact-type, EAS genera:
-AAB en perfiles de distribución (preview, production)
-APK en perfiles development
-
-

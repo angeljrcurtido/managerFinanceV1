@@ -1,13 +1,13 @@
 // app/Egresos/ListarEgresos.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { parse, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { fetchExpenses, fetchExpensesByDate, softDeleteExpense } from '../../DataBase/TablaEgresos';
+import CustomDatePicker from '../../components/CustomDatePicker';
 
 interface Expense {
   id: number;
@@ -24,11 +24,9 @@ export default function ListarIngresos() {
 
   const [incomes, setIncomes] = useState<Expense[]>([]);
 
-  // Para filtros con DateTimePicker, usamos Date o null
+  // Para filtros con CustomDatePicker, usamos Date o null
   const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
-  const [showStartPicker, setShowStartPicker] = useState(false);
-  const [showEndPicker, setShowEndPicker] = useState(false);
 
   const router = useRouter();
 
@@ -157,52 +155,21 @@ export default function ListarIngresos() {
         <Text className="mb-2 text-gray-700 font-semibold">Filtrar por fechas</Text>
 
         <View className="flex-row mb-2">
-          <TouchableOpacity
-            onPress={() => setShowStartPicker(true)}
-            activeOpacity={0.8}
-            className="flex-1 border border-gray-300 rounded-md p-3 mr-2 bg-white"
-          >
-            <Text className="text-gray-800">
-              {filterStartDate ? format(filterStartDate, 'dd/MM/yyyy', { locale: es }) : 'Fecha inicio'}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setShowEndPicker(true)}
-            activeOpacity={0.8}
-            className="flex-1 border border-gray-300 rounded-md p-3 ml-2 bg-white"
-          >
-            <Text className="text-gray-800">
-              {filterEndDate ? format(filterEndDate, 'dd/MM/yyyy', { locale: es }) : 'Fecha fin'}
-            </Text>
-          </TouchableOpacity>
+          <View className="flex-1 mr-2">
+            <CustomDatePicker
+              selectedDate={filterStartDate || new Date()}
+              onDateChange={(date) => setFilterStartDate(date)}
+              label="Fecha inicio"
+            />
+          </View>
+          <View className="flex-1 ml-2">
+            <CustomDatePicker
+              selectedDate={filterEndDate || new Date()}
+              onDateChange={(date) => setFilterEndDate(date)}
+              label="Fecha fin"
+            />
+          </View>
         </View>
-
-        {/* DateTimePicker para fecha inicio */}
-        {showStartPicker && (
-          <DateTimePicker
-            testID="startDateTimePicker"
-            value={filterStartDate || new Date()}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              setShowStartPicker(Platform.OS === 'ios');
-              if (selectedDate) setFilterStartDate(selectedDate);
-            }}
-          />
-        )}
-        {/* DateTimePicker para fecha fin */}
-        {showEndPicker && (
-          <DateTimePicker
-            testID="endDateTimePicker"
-            value={filterEndDate || new Date()}
-            mode="date"
-            display="default"
-            onChange={(event, selectedDate) => {
-              setShowEndPicker(Platform.OS === 'ios');
-              if (selectedDate) setFilterEndDate(selectedDate);
-            }}
-          />
-        )}
         <Text className="mb-2 text-gray-700 font-semibold">Filtrar por categoría</Text>
         <FlatList
           horizontal

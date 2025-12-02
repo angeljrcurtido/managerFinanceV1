@@ -7,18 +7,17 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-  Platform,
   FlatList
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { es } from 'date-fns/locale';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 import { insertExpense } from '../../DataBase/TablaEgresos';
 import { MaterialIcons } from '@expo/vector-icons';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { Category } from '../Categorias/interface';
+import CustomDatePicker from '../../components/CustomDatePicker';
 
 
 export default function CrearEgresos() {
@@ -26,7 +25,6 @@ export default function CrearEgresos() {
   const [description, setDescription] = useState('');
   // Estado para la fecha seleccionada (por defecto: hoy)
   const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [modalNoCategories, setModalNoCategories] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal de éxito
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false); // Modal para seleccionar categoría
@@ -82,16 +80,6 @@ export default function CrearEgresos() {
     }, 3000);
   };
 
-  const onChangeDate = (event: any, selectedDate?: Date) => {
-    // Si el usuario cancela, no se actualiza la fecha
-    if (event.type === 'dismissed') {
-      setShowDatePicker(false);
-      return;
-    }
-    const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios'); // En iOS el picker se muestra en pantalla
-    setDate(currentDate);
-  };
 
   // Renderiza cada categoría en el modal de selección
   const renderCategoryItem = ({ item }: { item: Category }) => (
@@ -179,7 +167,7 @@ export default function CrearEgresos() {
             <Pressable
               onPress={() => {
                 setModalNoCategories(false);
-                router.push("Categorias/CrearCategorias");
+                router.push("/Categorias/CrearCategorias");
               }}
               className="bg-blue-600 px-4 py-2 rounded-md mt-2 w-full"
             >
@@ -219,24 +207,10 @@ export default function CrearEgresos() {
         />
 
         {/* Selector de Fecha */}
-        <TouchableOpacity
-          onPress={() => setShowDatePicker(true)}
-          activeOpacity={0.8}
-          className="border border-gray-300 rounded-md p-3 mb-4"
-        >
-          <Text className="text-gray-900">
-            Fecha: {format(date, 'dd/MM/yyyy', { locale: es })}
-          </Text>
-        </TouchableOpacity> 
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onChangeDate}
-          />
-        )}
+        <CustomDatePicker
+          selectedDate={date}
+          onDateChange={setDate}
+        />
 
         {/* Selector de Categoría */}
         <View className="mb-4">
@@ -279,7 +253,7 @@ export default function CrearEgresos() {
 
       {/* Botón para ver el listado */}
       <TouchableOpacity
-        onPress={() => router.push('Egresos/ListarEgresos')}
+        onPress={() => router.push('/Egresos/ListarEgresos')}
         activeOpacity={0.8}
         className="mt-6 bg-green-500 py-3 rounded-md"
       >
@@ -288,7 +262,7 @@ export default function CrearEgresos() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => router.push('Categorias/CrearCategorias')}
+        onPress={() => router.push('/Categorias/CrearCategorias')}
         activeOpacity={0.8}
         className="mt-6 bg-green-500 py-3 rounded-md"
       >

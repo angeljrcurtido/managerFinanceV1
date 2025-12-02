@@ -7,25 +7,23 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-  Platform,
   FlatList
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 import { es } from 'date-fns/locale';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 import { insertIncome } from '../../DataBase/TablaIngresos';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from '../Categorias/interface';
+import CustomDatePicker from '../../components/CustomDatePicker';
 
 export default function CrearIngresos() {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   // Estado para la fecha seleccionada (por defecto: hoy)
   const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [modalNoCategories, setModalNoCategories] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal de éxito
   const [modalCategoryVisible, setModalCategoryVisible] = useState(false); // Modal para seleccionar categoría
@@ -81,16 +79,6 @@ export default function CrearIngresos() {
     }, 3000);
   };
 
-  const onChangeDate = (event: any, selectedDate?: Date) => {
-    // Si el usuario cancela, no se actualiza la fecha
-    if (event.type === 'dismissed') {
-      setShowDatePicker(false);
-      return;
-    }
-    const currentDate = selectedDate || date;
-    setShowDatePicker(Platform.OS === 'ios'); // En iOS el picker se muestra en pantalla
-    setDate(currentDate);
-  };
 
   // Renderiza cada categoría en el modal de selección
   const renderCategoryItem = ({ item }: { item: Category }) => (
@@ -101,7 +89,7 @@ export default function CrearIngresos() {
       }}
       className="border border-gray-300 rounded-md p-3 mb-2 bg-white flex-row items-center"
     >
-      <MaterialIcons name={item.icon} size={24} color="black" />
+      <MaterialIcons name={item.icon as any} size={24} color="black" />
       <Text className="text-gray-800">{item.name}</Text>
     </TouchableOpacity>
   );
@@ -178,7 +166,7 @@ export default function CrearIngresos() {
             <Pressable
               onPress={() => {
                 setModalNoCategories(false);
-                router.push("Categorias/CrearCategorias");
+                router.push("/Categorias/CrearCategorias");
               }}
               className="bg-blue-600 px-4 py-2 rounded-md mt-2 w-full"
             >
@@ -218,24 +206,10 @@ export default function CrearIngresos() {
         />
 
         {/* Selector de Fecha */}
-        <TouchableOpacity
-          onPress={() => setShowDatePicker(true)}
-          activeOpacity={0.8}
-          className="border border-gray-300 rounded-md p-3 mb-4"
-        >
-          <Text className="text-gray-900">
-            Fecha: {format(date, 'dd/MM/yyyy', { locale: es })}
-          </Text>
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onChangeDate}
-          />
-        )}
+        <CustomDatePicker
+          selectedDate={date}
+          onDateChange={setDate}
+        />
 
         {/* Selector de Categoría */}
         <View className="mb-4">
@@ -257,7 +231,7 @@ export default function CrearIngresos() {
           </TouchableOpacity>
           {selectedCategory && (
             <View className=' flex-row items-center'>
-             <MaterialIcons className='mt-2' name={selectedCategory.icon} size={18} color="#374151" />
+             <MaterialIcons className='mt-2' name={selectedCategory.icon as any} size={18} color="#374151" />
             <Text className="mt-2 text-gray-700 italic">
               Categoría seleccionada: {selectedCategory.name}
             </Text>
@@ -278,7 +252,7 @@ export default function CrearIngresos() {
 
       {/* Botón para ver el listado */}
       <TouchableOpacity
-        onPress={() => router.push('Ingresos/ListarIngresos')}
+        onPress={() => router.push('/Ingresos/ListarIngresos')}
         activeOpacity={0.8}
         className="mt-6 bg-green-500 py-3 rounded-md"
       >
@@ -287,7 +261,7 @@ export default function CrearIngresos() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => router.push('Categorias/CrearCategorias')}
+        onPress={() => router.push('/Categorias/CrearCategorias')}
         activeOpacity={0.8}
         className="mt-6 bg-green-500 py-3 rounded-md"
       >
