@@ -117,9 +117,9 @@ export default function CrearIngresos() {
 
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
         {/* Header */}
-        <View className="bg-green-600 dark:bg-green-800 pt-12 pb-8 px-6 rounded-b-[40px]">
+        <View className="bg-green-600 dark:bg-green-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">
             <View className="bg-white/20 p-3 rounded-full">
               <MaterialIcons name="add-circle" size={32} color="white" />
@@ -131,11 +131,11 @@ export default function CrearIngresos() {
           </View>
         </View>
 
-        <View className="px-6 mt-6">
+        <View className="px-4 mt-4">
           {/* Card principal */}
-          <View className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg mb-6">
+          <View className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg mb-4">
             {/* Monto */}
-            <View className="mb-6">
+            <View className="mb-4">
               <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
                 Monto
               </Text>
@@ -153,7 +153,7 @@ export default function CrearIngresos() {
             </View>
 
             {/* Descripción */}
-            <View className="mb-6">
+            <View className="mb-4">
               <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
                 Descripción
               </Text>
@@ -170,7 +170,7 @@ export default function CrearIngresos() {
             </View>
 
             {/* Fecha */}
-            <View className="mb-6">
+            <View className="mb-4">
               <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
                 Fecha
               </Text>
@@ -181,7 +181,7 @@ export default function CrearIngresos() {
             </View>
 
             {/* Categoría */}
-            <View className="mb-6">
+            <View className="mb-4">
               <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
                 Categoría
               </Text>
@@ -243,7 +243,7 @@ export default function CrearIngresos() {
           </View>
 
           {/* Botones secundarios */}
-          <View className="flex-row gap-3 mb-6">
+          <View className="flex-row gap-3 mb-4">
             <TouchableOpacity
               onPress={() => router.push('/Ingresos/ListarIngresos' as any)}
               activeOpacity={0.8}
@@ -276,8 +276,8 @@ export default function CrearIngresos() {
         visible={modalCategoryVisible}
         onRequestClose={() => setModalCategoryVisible(false)}
       >
-        <View className="flex-1 justify-center items-center bg-black/50">
-          <View className="bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-3xl p-6 shadow-2xl">
+        <View className="flex-1 justify-end items-center bg-black/50">
+          <View className="bg-white dark:bg-gray-800 w-full rounded-t-3xl p-4 shadow-2xl max-h-[70%]">
             <View className="flex-row items-center justify-between mb-4">
               <Text className="text-2xl font-bold text-gray-900 dark:text-white">
                 Selecciona una Categoría
@@ -290,14 +290,13 @@ export default function CrearIngresos() {
               </TouchableOpacity>
             </View>
 
-            <ScrollView className="max-h-96">
-              <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderCategoryItem}
-                scrollEnabled={false}
-              />
-            </ScrollView>
+            <FlatList
+              data={categories}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderCategoryItem}
+              showsVerticalScrollIndicator={true}
+              contentContainerStyle={{ paddingBottom: 10 }}
+            />
 
             <TouchableOpacity
               onPress={() => setModalCategoryVisible(false)}

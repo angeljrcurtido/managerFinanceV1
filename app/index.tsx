@@ -8,29 +8,29 @@ export default function IndexScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <ScrollView className="flex-1 bg-gray-50 dark:bg-gray-900" contentContainerStyle={{ paddingBottom: 20 }}>
       {/* Header con gradiente */}
-      <View className="bg-blue-600 dark:bg-blue-900 pt-16 pb-32 px-6 rounded-b-[40px]">
+      <View className="bg-blue-600 dark:bg-blue-900 pt-12 pb-20 px-4 rounded-b-[30px]">
         <View className="items-center">
-          <View className="bg-white/20 p-4 rounded-full mb-4">
-            <MaterialIcons name="account-balance-wallet" size={48} color="white" />
+          <View className="bg-white/20 p-3 rounded-full mb-3">
+            <MaterialIcons name="account-balance-wallet" size={40} color="white" />
           </View>
-          <Text className="text-4xl font-extrabold text-white mb-2">
+          <Text className="text-3xl font-extrabold text-white mb-1">
             ManagerFinance
           </Text>
-          <Text className="text-blue-100 text-center text-base">
+          <Text className="text-blue-100 text-center text-sm">
             Controla tus finanzas de manera inteligente
           </Text>
         </View>
       </View>
 
       {/* Cards de acciones */}
-      <View className="px-6 -mt-20">
+      <View className="px-4 -mt-16">
         {/* Card Ingresos */}
         <TouchableOpacity
           onPress={() => router.push('/Ingresos/CrearIngreso' as any)}
           activeOpacity={0.9}
-          className="bg-white dark:bg-gray-800 rounded-3xl p-6 mb-4 shadow-lg"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 shadow-lg"
         >
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
@@ -54,7 +54,7 @@ export default function IndexScreen() {
         <TouchableOpacity
           onPress={() => router.push('/Egresos/CrearEgresos' as any)}
           activeOpacity={0.9}
-          className="bg-white dark:bg-gray-800 rounded-3xl p-6 mb-4 shadow-lg"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 shadow-lg"
         >
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
@@ -78,7 +78,7 @@ export default function IndexScreen() {
         <TouchableOpacity
           onPress={() => router.push('/Categorias/CrearCategorias' as any)}
           activeOpacity={0.9}
-          className="bg-white dark:bg-gray-800 rounded-3xl p-6 mb-4 shadow-lg"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-4 mb-3 shadow-lg"
         >
           <View className="flex-row items-center justify-between">
             <View className="flex-1">
@@ -99,37 +99,37 @@ export default function IndexScreen() {
         </TouchableOpacity>
 
         {/* Accesos rápidos */}
-        <View className="bg-indigo-600 dark:bg-indigo-800 rounded-3xl p-6 mt-4 mb-8">
-          <Text className="text-white font-bold text-lg mb-4">Accesos Rápidos</Text>
+        <View className="bg-indigo-600 dark:bg-indigo-800 rounded-2xl p-4 mt-2 mb-4">
+          <Text className="text-white font-bold text-base mb-3">Accesos Rápidos</Text>
           <View className="flex-row justify-around">
             <TouchableOpacity
               onPress={() => router.push('/Ingresos/ListarIngresos' as any)}
               className="items-center"
             >
-              <View className="bg-white/20 p-4 rounded-2xl mb-2">
-                <MaterialIcons name="list" size={28} color="white" />
+              <View className="bg-white/20 p-3 rounded-xl mb-2">
+                <MaterialIcons name="list" size={24} color="white" />
               </View>
-              <Text className="text-white text-xs font-medium">Ver Ingresos</Text>
+              <Text className="text-white text-xs font-medium text-center">Ver Ingresos</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => router.push('/Egresos/ListarEgresos' as any)}
               className="items-center"
             >
-              <View className="bg-white/20 p-4 rounded-2xl mb-2">
-                <MaterialIcons name="receipt-long" size={28} color="white" />
+              <View className="bg-white/20 p-3 rounded-xl mb-2">
+                <MaterialIcons name="receipt-long" size={24} color="white" />
               </View>
-              <Text className="text-white text-xs font-medium">Ver Egresos</Text>
+              <Text className="text-white text-xs font-medium text-center">Ver Egresos</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => router.push('/Categorias/ListarCategorias' as any)}
               className="items-center"
             >
-              <View className="bg-white/20 p-4 rounded-2xl mb-2">
-                <MaterialIcons name="label" size={28} color="white" />
+              <View className="bg-white/20 p-3 rounded-xl mb-2">
+                <MaterialIcons name="label" size={24} color="white" />
               </View>
-              <Text className="text-white text-xs font-medium">Categorías</Text>
+              <Text className="text-white text-xs font-medium text-center">Categorías</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -121,7 +121,7 @@ export default function ListarIngresos() {
     const formattedDate = format(parsedDate, "dd 'de' MMM", { locale: es });
 
     return (
-      <View className="bg-white dark:bg-gray-800 rounded-2xl p-5 mb-3 shadow-md">
+      <View className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-2 shadow-md">
         <View className="flex-row items-start justify-between mb-3">
           <View className="flex-1">
             {/* Categoría */}
@@ -171,7 +171,7 @@ export default function ListarIngresos() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <View className="bg-green-600 dark:bg-green-800 pt-12 pb-6 px-6">
+      <View className="bg-green-600 dark:bg-green-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">
             <Text className="text-white text-3xl font-bold mb-1">Ingresos</Text>
@@ -186,9 +186,9 @@ export default function ListarIngresos() {
         </View>
 
         {/* Total */}
-        <View className="bg-white/10 rounded-2xl p-4 mt-2">
-          <Text className="text-green-100 text-sm mb-1">Total de Ingresos</Text>
-          <Text className="text-white text-3xl font-bold">
+        <View className="bg-white/10 rounded-xl p-3 mt-2">
+          <Text className="text-green-100 text-xs mb-1">Total de Ingresos</Text>
+          <Text className="text-white text-2xl font-bold">
             ${totalIngresos.toLocaleString()}
           </Text>
           <Text className="text-green-100 text-xs mt-1">
@@ -273,7 +273,7 @@ export default function ListarIngresos() {
         data={incomes}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderIncome}
-        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+        contentContainerStyle={{ padding: 12, paddingBottom: 80 }}
         ListEmptyComponent={
           <View className="items-center justify-center py-12">
             <MaterialIcons name="receipt-long" size={64} color="#D1D5DB" />
@@ -285,14 +285,14 @@ export default function ListarIngresos() {
       />
 
       {/* Botón flotante */}
-      <View className="absolute bottom-6 right-6 left-6">
+      <View className="absolute bottom-4 right-4 left-4">
         <TouchableOpacity
           onPress={() => router.back()}
           activeOpacity={0.9}
-          className="bg-green-600 dark:bg-green-700 py-4 rounded-2xl shadow-lg flex-row items-center justify-center"
+          className="bg-green-600 dark:bg-green-700 py-3 rounded-xl shadow-lg flex-row items-center justify-center"
         >
-          <MaterialIcons name="add-circle" size={24} color="white" />
-          <Text className="text-white font-bold text-lg ml-2">Nuevo Ingreso</Text>
+          <MaterialIcons name="add-circle" size={22} color="white" />
+          <Text className="text-white font-bold text-base ml-2">Nuevo Ingreso</Text>
         </TouchableOpacity>
       </View>
     </View>
