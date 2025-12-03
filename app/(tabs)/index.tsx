@@ -1,98 +1,132 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import React from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <ScrollView className="flex-1 bg-white dark:bg-gray-900">
+      <View className="flex-1 p-6">
+        {/* Header */}
+        <View className="mb-8">
+          <View className="flex-row items-center gap-2 mb-4">
+            <Text className="text-4xl font-bold text-gray-900 dark:text-white">
+              Welcome! 👋
+            </Text>
+          </View>
+          <Text className="text-lg text-gray-600 dark:text-gray-400">
+            Test de NativeWind con Tailwind CSS
+          </Text>
+        </View>
+
+        {/* Card 1 - Test de colores y estilos */}
+        <View className="bg-blue-100 dark:bg-blue-900 rounded-2xl p-6 mb-4 shadow-lg">
+          <View className="flex-row items-center gap-2 mb-3">
+            <MaterialIcons name="palette" size={24} color="#3B82F6" />
+            <Text className="text-xl font-bold text-blue-900 dark:text-blue-100">
+              Test de Colores
+            </Text>
+          </View>
+          <Text className="text-base text-blue-800 dark:text-blue-200 mb-4">
+            Si ves este card con fondo azul claro (modo light) o azul oscuro (modo dark),
+            ¡NativeWind está funcionando correctamente! 🎉
+          </Text>
+          <TouchableOpacity
+            className="bg-blue-600 py-3 px-4 rounded-lg"
+            onPress={() => alert('¡NativeWind funciona!')}
+          >
+            <Text className="text-white font-semibold text-center">
+              Probar Interacción
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Card 2 - Test de layouts */}
+        <View className="bg-green-100 dark:bg-green-900 rounded-2xl p-6 mb-4 shadow-lg">
+          <View className="flex-row items-center gap-2 mb-3">
+            <MaterialIcons name="view-module" size={24} color="#22C55E" />
+            <Text className="text-xl font-bold text-green-900 dark:text-green-100">
+              Test de Layouts
+            </Text>
+          </View>
+          <View className="flex-row gap-2 mb-4">
+            <View className="flex-1 bg-green-600 h-16 rounded-lg items-center justify-center">
+              <Text className="text-white font-medium">Flex 1</Text>
+            </View>
+            <View className="flex-1 bg-green-700 h-16 rounded-lg items-center justify-center">
+              <Text className="text-white font-medium">Flex 1</Text>
+            </View>
+            <View className="flex-1 bg-green-800 h-16 rounded-lg items-center justify-center">
+              <Text className="text-white font-medium">Flex 1</Text>
+            </View>
+          </View>
+          <Text className="text-sm text-green-800 dark:text-green-200">
+            Layout flexbox con gap funcionando ✓
+          </Text>
+        </View>
+
+        {/* Card 3 - Test de espaciado */}
+        <View className="bg-purple-100 dark:bg-purple-900 rounded-2xl p-6 mb-4 shadow-lg">
+          <View className="flex-row items-center gap-2 mb-3">
+            <MaterialIcons name="space-bar" size={24} color="#A855F7" />
+            <Text className="text-xl font-bold text-purple-900 dark:text-purple-100">
+              Test de Espaciado
+            </Text>
+          </View>
+          <View className="space-y-2">
+            <View className="bg-purple-600 p-4 rounded-lg">
+              <Text className="text-white">Padding 4</Text>
+            </View>
+            <View className="bg-purple-700 p-6 rounded-lg">
+              <Text className="text-white">Padding 6</Text>
+            </View>
+            <View className="bg-purple-800 p-8 rounded-lg">
+              <Text className="text-white">Padding 8</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Card 4 - Navegación */}
+        <View className="bg-orange-100 dark:bg-orange-900 rounded-2xl p-6 mb-4 shadow-lg">
+          <View className="flex-row items-center gap-2 mb-3">
+            <MaterialIcons name="explore" size={24} color="#F97316" />
+            <Text className="text-xl font-bold text-orange-900 dark:text-orange-100">
+              Navegación
+            </Text>
+          </View>
+          <Text className="text-base text-orange-800 dark:text-orange-200 mb-4">
+            Prueba la navegación a otras pantallas:
+          </Text>
+          <TouchableOpacity
+            className="bg-orange-600 py-3 px-4 rounded-lg mb-2"
+            onPress={() => router.push('/Ingresos/CrearIngreso')}
+          >
+            <Text className="text-white font-semibold text-center">
+              Ir a Crear Ingreso
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="bg-orange-700 py-3 px-4 rounded-lg"
+            onPress={() => router.push('/modal')}
+          >
+            <Text className="text-white font-semibold text-center">
+              Abrir Modal
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Footer */}
+        <View className="mt-8 p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl">
+          <Text className="text-center text-gray-600 dark:text-gray-400 text-sm">
+            ✅ NativeWind v4 + Expo 54
+          </Text>
+          <Text className="text-center text-gray-500 dark:text-gray-500 text-xs mt-2">
+            Tailwind CSS funcionando en React Native
+          </Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

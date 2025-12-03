@@ -1,13 +1,13 @@
 // app/Ingresos/ListarIngresos.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { parse, format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchIncomes, fetchIncomesByDate, softDeleteIncome } from '../../DataBase/TablaIngresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
+import { MaterialIcons } from '@expo/vector-icons';
 
 interface Income {
   id: number;
@@ -21,12 +21,10 @@ interface Income {
 export default function ListarIngresos() {
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-
   const [incomes, setIncomes] = useState<Income[]>([]);
-
-  // Para filtros con CustomDatePicker, usamos Date o null
   const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
   const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
 
@@ -40,15 +38,13 @@ export default function ListarIngresos() {
 
   useEffect(() => {
     if (categories.length > 0) {
-      loadIncomes(); // solo cuando ya hay categorías
+      loadIncomes();
     }
   }, [categories]);
 
   const loadIncomes = async () => {
     try {
       const data = await fetchIncomes();
-
-      // Enlazamos cada ingreso con su nombre de categoría
       const enrichedIncomes = data.map((income: any) => {
         const category = categories.find((cat) => cat.id === income.category_id);
         return {
@@ -57,7 +53,6 @@ export default function ListarIngresos() {
           categoryName: category ? category.name : "Sin categoría",
         };
       });
-
       setIncomes(enrichedIncomes);
     } catch (error) {
       console.error("Error al cargar ingresos:", error);
@@ -96,6 +91,7 @@ export default function ListarIngresos() {
   const clearFilters = async () => {
     setFilterStartDate(null);
     setFilterEndDate(null);
+    setSelectedCategoryId(null);
     loadIncomes();
   };
 
@@ -117,112 +113,188 @@ export default function ListarIngresos() {
     );
   };
 
+  // Calcular total
+  const totalIngresos = incomes.reduce((sum, item) => sum + item.amount, 0);
+
   const renderIncome = ({ item }: { item: Income }) => {
-    // Se asume que item.date viene en formato 'dd/MM/yyyy'
     const parsedDate = parse(item.date, 'dd/MM/yyyy', new Date());
-    const formattedDate = format(parsedDate, 'dd/MM/yyyy', { locale: es });
+    const formattedDate = format(parsedDate, "dd 'de' MMM", { locale: es });
 
     return (
-      <View className="bg-white rounded-lg shadow p-4 mb-3">
-        <Text className="text-xs italic text-gray-500">{item.categoryName || "Sin categoría"}</Text>
-        <Text className="text-lg font-medium text-gray-800">{item.description}</Text>
-        <Text className="text-gray-600">${item.amount}</Text>
-        <Text className="text-gray-500 text-xs mt-1">
-          {formattedDate}
-        </Text>
+      <View className="bg-white dark:bg-gray-800 rounded-2xl p-5 mb-3 shadow-md">
+        <View className="flex-row items-start justify-between mb-3">
+          <View className="flex-1">
+            {/* Categoría */}
+            <View className="flex-row items-center mb-2">
+              <View className="bg-green-100 dark:bg-green-900 px-3 py-1 rounded-full">
+                <Text className="text-green-700 dark:text-green-300 text-xs font-semibold">
+                  {item.categoryName || "Sin categoría"}
+                </Text>
+              </View>
+            </View>
+
+            {/* Descripción */}
+            <Text className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+              {item.description}
+            </Text>
+
+            {/* Fecha */}
+            <View className="flex-row items-center">
+              <MaterialIcons name="schedule" size={14} color="#9CA3AF" />
+              <Text className="text-gray-500 dark:text-gray-400 text-sm ml-1">
+                {formattedDate}
+              </Text>
+            </View>
+          </View>
+
+          {/* Monto */}
+          <View className="items-end">
+            <Text className="text-2xl font-bold text-green-600 dark:text-green-400">
+              ${item.amount.toLocaleString()}
+            </Text>
+          </View>
+        </View>
+
+        {/* Botón Anular */}
         <TouchableOpacity
           onPress={() => handleSoftDeleteIncome(item.id)}
-          activeOpacity={0.8}
-          className="mt-2 bg-red-600 py-2 rounded-md"
+          activeOpacity={0.7}
+          className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 py-2 rounded-xl flex-row items-center justify-center"
         >
-          <Text className="text-center text-white font-semibold">Anular</Text>
+          <MaterialIcons name="cancel" size={18} color="#EF4444" />
+          <Text className="text-red-600 dark:text-red-400 font-semibold ml-2">Anular Ingreso</Text>
         </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <View className="flex-1 bg-gray-100 p-6">
-      <BannerAd
-        unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-2555525398874365/1363242036'}
-        size={BannerAdSize.BANNER}
-        onAdFailedToLoad={(error) => console.error('Error al cargar el banner:', error)}
-      />
-      <Text className="text-2xl font-bold text-gray-800 mb-6">Listado de Ingresos</Text>
-
-      {/* Sección de Filtros con DatePicker */}
-      <View className="mb-4">
-        <Text className="mb-2 text-gray-700 font-semibold">Filtrar por fechas</Text>
-
-        <View className="flex-row mb-2">
-          <View className="flex-1 mr-2">
-            <CustomDatePicker
-              selectedDate={filterStartDate || new Date()}
-              onDateChange={(date) => setFilterStartDate(date)}
-              label="Fecha inicio"
-            />
+    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <View className="bg-green-600 dark:bg-green-800 pt-12 pb-6 px-6">
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-1">
+            <Text className="text-white text-3xl font-bold mb-1">Ingresos</Text>
+            <Text className="text-green-100">Historial de ganancias</Text>
           </View>
-          <View className="flex-1 ml-2">
-            <CustomDatePicker
-              selectedDate={filterEndDate || new Date()}
-              onDateChange={(date) => setFilterEndDate(date)}
-              label="Fecha fin"
-            />
-          </View>
+          <TouchableOpacity
+            onPress={() => setShowFilters(!showFilters)}
+            className="bg-white/20 p-3 rounded-full"
+          >
+            <MaterialIcons name="filter-list" size={24} color="white" />
+          </TouchableOpacity>
         </View>
-        <Text className="mb-2 text-gray-700 font-semibold">Filtrar por categoría</Text>
-        <FlatList
-          horizontal
-          data={categories}
-          keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={{ paddingBottom: 10 }}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                setSelectedCategoryId((prev) => (prev === item.id ? null : item.id))
-              }
-              className={`px-4 py-2 mr-2 rounded-full ${selectedCategoryId === item.id
-                  ? 'bg-blue-600'
-                  : 'bg-gray-300'
-                }`}
-            >
-              <Text className="text-white font-medium">{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-        <View className="flex-row justify-between mt-4">
-          <TouchableOpacity
-            onPress={handleFilterIncomes}
-            activeOpacity={0.8}
-            className="bg-blue-600 py-2 rounded-md flex-1 mr-2"
-          >
-            <Text className="text-center text-white font-semibold">Filtrar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={clearFilters}
-            activeOpacity={0.8}
-            className="bg-gray-500 py-2 rounded-md flex-1 ml-2"
-          >
-            <Text className="text-center text-white font-semibold">Limpiar Filtro</Text>
-          </TouchableOpacity>
+
+        {/* Total */}
+        <View className="bg-white/10 rounded-2xl p-4 mt-2">
+          <Text className="text-green-100 text-sm mb-1">Total de Ingresos</Text>
+          <Text className="text-white text-3xl font-bold">
+            ${totalIngresos.toLocaleString()}
+          </Text>
+          <Text className="text-green-100 text-xs mt-1">
+            {incomes.length} {incomes.length === 1 ? 'registro' : 'registros'}
+          </Text>
         </View>
       </View>
 
+      {/* Filtros */}
+      {showFilters && (
+        <View className="bg-white dark:bg-gray-800 p-4 shadow-lg">
+          <Text className="font-bold text-gray-900 dark:text-white mb-3 text-lg">Filtros</Text>
+
+          {/* Fechas */}
+          <View className="flex-row mb-3">
+            <View className="flex-1 mr-2">
+              <CustomDatePicker
+                selectedDate={filterStartDate || new Date()}
+                onDateChange={(date) => setFilterStartDate(date)}
+                label="Fecha inicio"
+              />
+            </View>
+            <View className="flex-1 ml-2">
+              <CustomDatePicker
+                selectedDate={filterEndDate || new Date()}
+                onDateChange={(date) => setFilterEndDate(date)}
+                label="Fecha fin"
+              />
+            </View>
+          </View>
+
+          {/* Categorías */}
+          <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2">Categorías</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-3">
+            {categories.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() =>
+                  setSelectedCategoryId((prev) => (prev === item.id ? null : item.id))
+                }
+                className={`px-4 py-2 mr-2 rounded-full ${
+                  selectedCategoryId === item.id
+                    ? 'bg-green-600'
+                    : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                <Text className={`font-medium ${
+                  selectedCategoryId === item.id
+                    ? 'text-white'
+                    : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+
+          {/* Botones */}
+          <View className="flex-row gap-2">
+            <TouchableOpacity
+              onPress={handleFilterIncomes}
+              activeOpacity={0.8}
+              className="bg-green-600 py-3 rounded-xl flex-1 flex-row items-center justify-center"
+            >
+              <MaterialIcons name="search" size={20} color="white" />
+              <Text className="text-white font-bold ml-2">Aplicar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={clearFilters}
+              activeOpacity={0.8}
+              className="bg-gray-300 dark:bg-gray-700 py-3 rounded-xl flex-1 flex-row items-center justify-center"
+            >
+              <MaterialIcons name="clear" size={20} color="#6B7280" />
+              <Text className="text-gray-700 dark:text-gray-300 font-bold ml-2">Limpiar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      {/* Lista */}
       <FlatList
         data={incomes}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderIncome}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+        ListEmptyComponent={
+          <View className="items-center justify-center py-12">
+            <MaterialIcons name="receipt-long" size={64} color="#D1D5DB" />
+            <Text className="text-gray-500 dark:text-gray-400 text-center mt-4 text-lg">
+              No hay ingresos registrados
+            </Text>
+          </View>
+        }
       />
 
-      {/* Botón para volver a la vista de registro */}
-      <TouchableOpacity
-        onPress={() => router.back()}
-        activeOpacity={0.8}
-        className="mt-6 bg-blue-600 py-3 rounded-md"
-      >
-        <Text className="text-center text-white font-semibold">Volver a registrar ingreso</Text>
-      </TouchableOpacity>
+      {/* Botón flotante */}
+      <View className="absolute bottom-6 right-6 left-6">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          activeOpacity={0.9}
+          className="bg-green-600 dark:bg-green-700 py-4 rounded-2xl shadow-lg flex-row items-center justify-center"
+        >
+          <MaterialIcons name="add-circle" size={24} color="white" />
+          <Text className="text-white font-bold text-lg ml-2">Nuevo Ingreso</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

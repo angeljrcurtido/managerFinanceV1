@@ -1,36 +1,53 @@
-// app/_layout.tsx
-import React, { useEffect } from 'react';
-import { Slot } from 'expo-router';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import 'react-native-reanimated';
+import '../global.css';
+
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { initIngresosTable } from '../DataBase/TablaIngresos';
 import { initCategoriasTable } from '../DataBase/TablaCategoria';
 import { initEgresosTable } from '../DataBase/TablaEgresos';
-import mobileAds from "react-native-google-mobile-ads";
-import "../global.css"
 
-export default function Layout() {
-  
-  useEffect(() => {
-    mobileAds()
-      .initialize()
-      .then(adapterStatuses => {
-        console.log("MobileAds inicializado correctamente:", adapterStatuses);
-      })
-      .catch(error => {
-        console.error("Error al inicializar MobileAds", error);
-      });
-  }, []);
+export const unstable_settings = {
+  anchor: '/',
+};
 
-  async function initDatabase() {
-    await initEgresosTable();
-    await initCategoriasTable();
-    await initIngresosTable();
-  }
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
-    (async () => {
-      await initDatabase();
-    })();
+
+    // Inicializar base de datos
+    async function initDatabase() {
+      try {
+        await initCategoriasTable();
+        await initEgresosTable();
+        await initIngresosTable();
+        console.log("Base de datos inicializada correctamente");
+      } catch (error) {
+        console.error("Error al inicializar la base de datos:", error);
+      }
+    }
+
+    initDatabase();
   }, []);
 
-  return <Slot />;
+  return (
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+        <Stack.Screen name="Categorias/CrearCategorias" options={{ title: 'Crear Categoría' }} />
+        <Stack.Screen name="Categorias/ListarCategorias" options={{ title: 'Lista de Categorías' }} />
+        <Stack.Screen name="Egresos/CrearEgresos" options={{ title: 'Registrar Egreso' }} />
+        <Stack.Screen name="Egresos/ListarEgresos" options={{ title: 'Lista de Egresos' }} />
+        <Stack.Screen name="Ingresos/CrearIngreso" options={{ title: 'Registrar Ingreso' }} />
+        <Stack.Screen name="Ingresos/ListarIngresos" options={{ title: 'Lista de Ingresos' }} />
+      </Stack>
+      <StatusBar style="auto" />
+    </ThemeProvider>
+  );
 }

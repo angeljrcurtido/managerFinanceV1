@@ -1,19 +1,16 @@
 // app/Categorias/CrearCategorias.tsx
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, Pressable, FlatList } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, ScrollView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { insertCategory } from '../../DataBase/TablaCategoria';
-
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function CrearCategorias() {
   const [name, setName] = useState('');
-  const [selectedIcon, setSelectedIcon] = useState<string>('shopping-cart'); // Valor por defecto
+  const [selectedIcon, setSelectedIcon] = useState<string>('shopping-cart');
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
-  // Array de iconos predefinidos (puedes agregar o quitar según lo requieras)
   const availableIcons = [
     'shopping-cart',
     'home',
@@ -24,90 +21,142 @@ export default function CrearCategorias() {
     'work',
     'school',
     'directions-car',
-    'favorite'
+    'favorite',
+    'local-hospital',
+    'flight',
+    'movie',
+    'music-note',
+    'phone',
+    'laptop'
   ];
 
   const handleCreateCategory = async () => {
     if (!name.trim()) {
-      alert("Por favor, ingresa un nombre para la categoría.");
+      Alert.alert("Campo requerido", "Por favor, ingresa un nombre para la categoría.");
       return;
     }
     try {
-      // Inserta la categoría con el nombre y la clave del icono seleccionado
       await insertCategory(name.trim(), selectedIcon);
-      alert("Categoría creada correctamente.");
+      Alert.alert("¡Éxito!", "Categoría creada correctamente.", [
+        { text: "OK", onPress: () => router.back() }
+      ]);
       setName('');
       setSelectedIcon('shopping-cart');
-      router.back();
     } catch (error) {
       console.error("Error al insertar la categoría:", error);
-      alert("No se pudo crear la categoría. Verifica que el nombre no se repita.");
+      Alert.alert("Error", "No se pudo crear la categoría. Verifica que el nombre no se repita.");
     }
   };
 
-  // Renderiza cada icono en el modal de selección
-  const renderIconItem = ({ item }: { item: string }) => (
-    <TouchableOpacity
-      onPress={() => {
-        setSelectedIcon(item);
-        setModalVisible(false);
-      }}
-      className="p-2 m-1 border border-gray-300 rounded"
-    >
-      <MaterialIcons name={item} size={32} color={item === selectedIcon ? 'blue' : 'black'} />
-    </TouchableOpacity>
-  );
+  const renderIconItem = ({ item }: { item: string }) => {
+    const isSelected = item === selectedIcon;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setSelectedIcon(item);
+          setModalVisible(false);
+        }}
+        activeOpacity={0.7}
+        className={`m-2 p-4 rounded-2xl ${
+          isSelected
+            ? 'bg-purple-100 border-2 border-purple-600'
+            : 'bg-gray-100 border-2 border-transparent'
+        }`}
+      >
+        <MaterialIcons name={item as any} size={32} color={isSelected ? '#A855F7' : '#6B7280'} />
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <View className="flex-1 bg-gray-100 p-6">
-      <BannerAd
-        unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-2555525398874365/1363242036'}
-        size={BannerAdSize.BANNER}
-        onAdFailedToLoad={(error) => console.error('Error al cargar el banner:', error)}
-      />
-      <Text className="text-2xl font-bold text-gray-800 mb-6">Crear Categoría</Text>
+    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+      <ScrollView>
+        {/* Header */}
+        <View className="bg-purple-600 dark:bg-purple-800 pt-12 pb-8 px-6 rounded-b-[40px]">
+          <View className="flex-row items-center mb-4">
+            <View className="bg-white/20 p-3 rounded-full">
+              <MaterialIcons name="add-circle" size={32} color="white" />
+            </View>
+            <View className="ml-4 flex-1">
+              <Text className="text-white text-3xl font-bold mb-1">Nueva Categoría</Text>
+              <Text className="text-purple-100">Organiza tus movimientos</Text>
+            </View>
+          </View>
+        </View>
 
-      <TextInput
-        className="border border-gray-300 rounded-md p-3 mb-4 text-gray-900"
-        placeholder="Nombre de la categoría"
-        value={name}
-        onChangeText={setName}
-        placeholderTextColor="#9CA3AF"
-      />
+        <View className="px-6 mt-6">
+          {/* Card principal */}
+          <View className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-lg mb-6">
+            {/* Vista previa del icono */}
+            <View className="items-center mb-6">
+              <View className="bg-purple-100 dark:bg-purple-900 p-6 rounded-full mb-3">
+                <MaterialIcons name={selectedIcon as any} size={48} color="#A855F7" />
+              </View>
+              <Text className="text-gray-500 dark:text-gray-400 text-sm">
+                Icono seleccionado
+              </Text>
+            </View>
 
-      {/* Botón para Seleccionar Icono */}
-      <Text className="mb-2 text-gray-800 font-medium">Icono:</Text>
-      <TouchableOpacity
-        onPress={() => setModalVisible(true)}
-        activeOpacity={0.8}
-        className="border border-gray-300 rounded-md p-3 bg-white flex-row items-center justify-between"
-      >
-        <MaterialIcons name={selectedIcon} size={24} color="black" />
-        <Text className="ml-2 text-gray-900">Seleccionar Icono</Text>
-      </TouchableOpacity>
+            {/* Input de nombre */}
+            <View className="mb-6">
+              <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
+                Nombre de la categoría
+              </Text>
+              <TextInput
+                className="bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-4 text-gray-900 dark:text-white text-base"
+                placeholder="Ej: Alimentos, Transporte..."
+                value={name}
+                onChangeText={setName}
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
 
-      {/* Muestra el icono seleccionado */}
-      <View className="flex-row items-center mt-2">
-        <Text className="text-gray-700">Icono seleccionado: </Text>
-        <MaterialIcons name={selectedIcon} size={24} color="black" />
-      </View>
+            {/* Botón para seleccionar icono */}
+            <View className="mb-6">
+              <Text className="text-gray-700 dark:text-gray-300 font-semibold mb-2 text-base">
+                Selecciona un icono
+              </Text>
+              <TouchableOpacity
+                onPress={() => setModalVisible(true)}
+                activeOpacity={0.8}
+                className="bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-200 dark:border-purple-800 rounded-xl p-4 flex-row items-center justify-between"
+              >
+                <View className="flex-row items-center">
+                  <MaterialIcons name={selectedIcon as any} size={28} color="#A855F7" />
+                  <Text className="ml-3 text-gray-900 dark:text-white font-medium">
+                    Cambiar icono
+                  </Text>
+                </View>
+                <MaterialIcons name="arrow-forward-ios" size={18} color="#9CA3AF" />
+              </TouchableOpacity>
+            </View>
 
-      {/* Botón para crear la categoría */}
-      <TouchableOpacity
-        onPress={handleCreateCategory}
-        activeOpacity={0.8}
-        className="bg-blue-600 py-3 rounded-md mt-6"
-      >
-        <Text className="text-center text-white font-semibold">Crear Categoría</Text>
-      </TouchableOpacity>
+            {/* Botón crear */}
+            <TouchableOpacity
+              onPress={handleCreateCategory}
+              activeOpacity={0.8}
+              className="bg-purple-600 dark:bg-purple-700 py-4 rounded-xl flex-row items-center justify-center shadow-md"
+            >
+              <MaterialIcons name="check-circle" size={22} color="white" />
+              <Text className="text-center text-white font-bold text-lg ml-2">
+                Crear Categoría
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-      <TouchableOpacity
-        onPress={() => router.push('Categorias/ListarCategorias')}
-        activeOpacity={0.8}
-        className="mt-6 bg-green-500 py-3 rounded-md"
-      >
-        <Text className="text-center text-white font-semibold">Lista de Categorias</Text>
-      </TouchableOpacity>
+          {/* Botón ver lista */}
+          <TouchableOpacity
+            onPress={() => router.push('/Categorias/ListarCategorias' as any)}
+            activeOpacity={0.8}
+            className="bg-white dark:bg-gray-800 border-2 border-purple-200 dark:border-purple-800 py-4 rounded-xl flex-row items-center justify-center mb-6"
+          >
+            <MaterialIcons name="list" size={22} color="#A855F7" />
+            <Text className="text-center text-purple-600 dark:text-purple-400 font-bold text-base ml-2">
+              Ver todas las categorías
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
 
       {/* Modal de selección de iconos */}
       <Modal
@@ -116,22 +165,37 @@ export default function CrearCategorias() {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View className="flex-1 justify-center items-center bg-black/30">
-          <View className="bg-white w-80 p-6 rounded-2xl shadow-lg">
-            <Text className="text-xl font-semibold mb-4 text-gray-800">Selecciona un Icono</Text>
-            <FlatList
-              data={availableIcons}
-              keyExtractor={(item) => item}
-              renderItem={renderIconItem}
-              numColumns={3}
-              contentContainerStyle={{ alignItems: 'center' }}
-            />
-            <Pressable
+        <View className="flex-1 justify-center items-center bg-black/50">
+          <View className="bg-white dark:bg-gray-800 w-11/12 max-w-md rounded-3xl p-6 shadow-2xl">
+            <View className="flex-row items-center justify-between mb-4">
+              <Text className="text-2xl font-bold text-gray-900 dark:text-white">
+                Selecciona un Icono
+              </Text>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                className="bg-gray-200 dark:bg-gray-700 p-2 rounded-full"
+              >
+                <MaterialIcons name="close" size={20} color="#6B7280" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView className="max-h-96">
+              <FlatList
+                data={availableIcons}
+                keyExtractor={(item) => item}
+                renderItem={renderIconItem}
+                numColumns={3}
+                scrollEnabled={false}
+                columnWrapperStyle={{ justifyContent: 'center' }}
+              />
+            </ScrollView>
+
+            <TouchableOpacity
               onPress={() => setModalVisible(false)}
-              className="bg-red-500 px-4 py-2 rounded-md mt-4"
+              className="bg-purple-600 py-3 rounded-xl mt-4"
             >
-              <Text className="text-white font-medium text-center">Cerrar</Text>
-            </Pressable>
+              <Text className="text-white font-bold text-center text-base">Confirmar</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

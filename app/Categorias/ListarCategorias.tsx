@@ -3,7 +3,6 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from './interface';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export default function ListarCategorias() {
@@ -25,36 +24,85 @@ export default function ListarCategorias() {
   }, []);
 
   const renderCategory = ({ item }: { item: Category }) => (
-    <View className="bg-white rounded-lg shadow p-4 mb-3 flex-row items-center">
-      {/* Renderiza el icono usando la clave almacenada en el campo icon */}
-      <MaterialIcons name={item.icon} size={24} color="black" />
-      <Text className="text-lg font-semibold text-gray-800 ml-2">{item.name}</Text>
+    <View className="bg-white dark:bg-gray-800 rounded-2xl p-5 mb-3 shadow-md">
+      <View className="flex-row items-center">
+        {/* Icono en círculo con fondo púrpura */}
+        <View className="bg-purple-100 dark:bg-purple-900 p-4 rounded-full">
+          <MaterialIcons name={item.icon as any} size={28} color="#A855F7" />
+        </View>
+
+        {/* Nombre de la categoría */}
+        <View className="flex-1 ml-4">
+          <Text className="text-xl font-bold text-gray-900 dark:text-white">
+            {item.name}
+          </Text>
+          <Text className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            Categoría personalizada
+          </Text>
+        </View>
+
+        {/* Flecha indicadora */}
+        <MaterialIcons name="arrow-forward-ios" size={18} color="#9CA3AF" />
+      </View>
     </View>
   );
 
   return (
-    <View className="flex-1 bg-gray-100 p-6">
-      <BannerAd
-        unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-2555525398874365/1363242036'}
-        size={BannerAdSize.BANNER}
-        onAdFailedToLoad={(error) => console.error('Error al cargar el banner:', error)}
-      />
-      <Text className="text-2xl font-bold text-gray-800 mb-6">Listado de Categorías</Text>
+    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <View className="bg-purple-600 dark:bg-purple-800 pt-12 pb-6 px-6">
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-1">
+            <Text className="text-white text-3xl font-bold mb-1">Categorías</Text>
+            <Text className="text-purple-100">Organiza tus finanzas</Text>
+          </View>
+          <View className="bg-white/20 p-3 rounded-full">
+            <MaterialIcons name="category" size={24} color="white" />
+          </View>
+        </View>
 
+        {/* Total */}
+        <View className="bg-white/10 rounded-2xl p-4 mt-2">
+          <Text className="text-purple-100 text-sm mb-1">Total de Categorías</Text>
+          <Text className="text-white text-3xl font-bold">
+            {categories.length}
+          </Text>
+          <Text className="text-purple-100 text-xs mt-1">
+            {categories.length === 1 ? 'categoría creada' : 'categorías creadas'}
+          </Text>
+        </View>
+      </View>
+
+      {/* Lista */}
       <FlatList
         data={categories}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderCategory}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+        ListEmptyComponent={
+          <View className="items-center justify-center py-12">
+            <MaterialIcons name="category" size={64} color="#D1D5DB" />
+            <Text className="text-gray-500 dark:text-gray-400 text-center mt-4 text-lg">
+              No hay categorías creadas
+            </Text>
+            <Text className="text-gray-400 dark:text-gray-500 text-center mt-2">
+              Crea tu primera categoría para organizar tus movimientos
+            </Text>
+          </View>
+        }
       />
 
-      <TouchableOpacity
-        onPress={() => router.back()}
-        activeOpacity={0.8}
-        className="mt-6 bg-blue-600 py-3 rounded-md"
-      >
-        <Text className="text-center text-white font-semibold">Volver</Text>
-      </TouchableOpacity>
+      {/* Botón flotante */}
+      <View className="absolute bottom-6 right-6 left-6">
+        <TouchableOpacity
+          onPress={() => router.back()}
+          activeOpacity={0.9}
+          className="bg-purple-600 dark:bg-purple-700 py-4 rounded-2xl shadow-lg flex-row items-center justify-center"
+        >
+          <MaterialIcons name="add-circle" size={24} color="white" />
+          <Text className="text-white font-bold text-lg ml-2">Nueva Categoría</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

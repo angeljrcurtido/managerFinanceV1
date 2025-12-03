@@ -1,17 +1,19 @@
 {
   "expo": {
-    "name": "MyAppIngresoEgreso",
-    "slug": "MyAppIngresoEgreso",
+    "name": "ManagerFinanceV3",
+    "slug": "ManagerFinanceV3",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myappingresoegreso",
+    "scheme": "managerfinancev3",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.managerfinance.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -44,6 +46,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c6bafdf0-29d4-447c-abc2-f405df026a30"
+      }
     }
   }
 }
