@@ -28,15 +28,15 @@ export default function ListarCategorias() {
       <View className="flex-row items-center">
         {/* Icono en círculo con fondo púrpura */}
         <View className="bg-purple-100 dark:bg-purple-900 p-4 rounded-full">
-          <MaterialIcons name={item.icon as any} size={28} color="#A855F7" />
+          <MaterialIcons name={item.icon as any} size={24} color="#A855F7" />
         </View>
 
         {/* Nombre de la categoría */}
         <View className="flex-1 ml-4">
-          <Text className="text-xl font-bold text-gray-900 dark:text-white">
+          <Text className="text-lg font-bold text-gray-900 dark:text-white">
             {item.name}
           </Text>
-          <Text className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+          <Text className="text-gray-500 dark:text-gray-400 text-xs mt-1">
             Categoría personalizada
           </Text>
         </View>
@@ -53,8 +53,8 @@ export default function ListarCategorias() {
       <View className="bg-purple-600 dark:bg-purple-800 pt-12 pb-6 px-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">
-            <Text className="text-white text-3xl font-bold mb-1">Categorías</Text>
-            <Text className="text-purple-100">Organiza tus finanzas</Text>
+            <Text className="text-white text-2xl font-bold mb-1">Categorías</Text>
+            <Text className="text-purple-100 text-sm">Organiza tus finanzas</Text>
           </View>
           <View className="bg-white/20 p-3 rounded-full">
             <MaterialIcons name="category" size={24} color="white" />
@@ -63,8 +63,8 @@ export default function ListarCategorias() {
 
         {/* Total */}
         <View className="bg-white/10 rounded-2xl p-4 mt-2">
-          <Text className="text-purple-100 text-sm mb-1">Total de Categorías</Text>
-          <Text className="text-white text-3xl font-bold">
+          <Text className="text-purple-100 text-xs mb-1">Total de Categorías</Text>
+          <Text className="text-white text-xl font-bold">
             {categories.length}
           </Text>
           <Text className="text-purple-100 text-xs mt-1">

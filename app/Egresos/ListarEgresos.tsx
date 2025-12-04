@@ -174,8 +174,8 @@ export default function ListarEgresos() {
       <View className="bg-red-600 dark:bg-red-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">
-            <Text className="text-white text-3xl font-bold mb-1">Egresos</Text>
-            <Text className="text-red-100">Historial de gastos</Text>
+            <Text className="text-white text-2xl font-bold mb-1">Egresos</Text>
+            <Text className="text-red-100 text-sm">Historial de gastos</Text>
           </View>
           <TouchableOpacity
             onPress={() => setShowFilters(!showFilters)}
@@ -188,7 +188,7 @@ export default function ListarEgresos() {
         {/* Total */}
         <View className="bg-white/10 rounded-xl p-3 mt-2">
           <Text className="text-red-100 text-xs mb-1">Total de Egresos</Text>
-          <Text className="text-white text-2xl font-bold">
+          <Text className="text-white text-xl font-bold">
             ${totalEgresos.toLocaleString()}
           </Text>
           <Text className="text-red-100 text-xs mt-1">
