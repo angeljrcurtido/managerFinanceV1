@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import '../global.css';
-
+import mobileAds from 'react-native-google-mobile-ads';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { initIngresosTable } from '../DataBase/TablaIngresos';
 import { initCategoriasTable } from '../DataBase/TablaCategoria';
@@ -18,7 +18,14 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-
+    mobileAds()
+      .initialize()
+      .then(adapterStatuses => {
+        console.log('Google Mobile Ads inicializado correctamente');
+      })
+      .catch(error => {
+        console.error('Error al inicializar Google Mobile Ads:', error);
+      });
     // Inicializar base de datos
     async function initDatabase() {
       try {

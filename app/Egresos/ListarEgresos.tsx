@@ -8,6 +8,7 @@ import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchExpenses, fetchExpensesByDate, softDeleteExpense } from '../../DataBase/TablaEgresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 interface Expense {
   id: number;
@@ -121,7 +122,15 @@ export default function ListarEgresos() {
     const formattedDate = format(parsedDate, "dd 'de' MMM", { locale: es });
 
     return (
+
       <View className="bg-white dark:bg-gray-800 rounded-xl p-4 mb-2 shadow-md">
+        <BannerAd
+          unitId={TestIds.BANNER} // Para pruebas, cambia por tu ID real en producción
+          size={BannerAdSize.BANNER} // O el tamaño que prefieras
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true, // Opcional
+          }}
+        />
         <View className="flex-row items-start justify-between mb-3">
           <View className="flex-1">
             {/* Categoría */}
@@ -229,17 +238,15 @@ export default function ListarEgresos() {
                 onPress={() =>
                   setSelectedCategoryId((prev) => (prev === item.id ? null : item.id))
                 }
-                className={`px-4 py-2 mr-2 rounded-full ${
-                  selectedCategoryId === item.id
+                className={`px-4 py-2 mr-2 rounded-full ${selectedCategoryId === item.id
                     ? 'bg-red-600'
                     : 'bg-gray-200 dark:bg-gray-700'
-                }`}
+                  }`}
               >
-                <Text className={`font-medium ${
-                  selectedCategoryId === item.id
+                <Text className={`font-medium ${selectedCategoryId === item.id
                     ? 'text-white'
                     : 'text-gray-700 dark:text-gray-300'
-                }`}>
+                  }`}>
                   {item.name}
                 </Text>
               </TouchableOpacity>
