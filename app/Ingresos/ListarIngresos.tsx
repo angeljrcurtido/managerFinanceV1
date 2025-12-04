@@ -1,6 +1,6 @@
 // app/Ingresos/ListarIngresos.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Alert, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { parse, format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -8,6 +8,8 @@ import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchIncomes, fetchIncomesByDate, softDeleteIncome } from '../../DataBase/TablaIngresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
+import { BannerAd, BannerAdSize, useForeground } from 'react-native-google-mobile-ads';
+import { adUnitId } from '@/constants/addUnitId';
 
 interface Income {
   id: number;
@@ -27,6 +29,11 @@ export default function ListarIngresos() {
   const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
+  const bannerRef = useRef<BannerAd>(null);
+
+  useForeground(() => {
+    Platform.OS === 'ios' && bannerRef.current?.load();
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -171,6 +178,13 @@ export default function ListarIngresos() {
   return (
     <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
+      <View className="bg-white dark:bg-gray-800 items-center py-2">
+        <BannerAd
+          ref={bannerRef}
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      </View>
       <View className="bg-green-600 dark:bg-green-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">
@@ -229,17 +243,15 @@ export default function ListarIngresos() {
                 onPress={() =>
                   setSelectedCategoryId((prev) => (prev === item.id ? null : item.id))
                 }
-                className={`px-4 py-2 mr-2 rounded-full ${
-                  selectedCategoryId === item.id
+                className={`px-4 py-2 mr-2 rounded-full ${selectedCategoryId === item.id
                     ? 'bg-green-600'
                     : 'bg-gray-200 dark:bg-gray-700'
-                }`}
+                  }`}
               >
-                <Text className={`font-medium ${
-                  selectedCategoryId === item.id
+                <Text className={`font-medium ${selectedCategoryId === item.id
                     ? 'text-white'
                     : 'text-gray-700 dark:text-gray-300'
-                }`}>
+                  }`}>
                   {item.name}
                 </Text>
               </TouchableOpacity>

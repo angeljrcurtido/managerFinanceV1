@@ -1,5 +1,5 @@
 // app/Ingresos/CrearIngresos.tsx
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,8 @@ import {
   Modal,
   FlatList,
   ScrollView,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { es } from 'date-fns/locale';
@@ -18,6 +19,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from '../Categorias/interface';
 import CustomDatePicker from '../../components/CustomDatePicker';
+import { BannerAd, BannerAdSize, useForeground } from 'react-native-google-mobile-ads';
+import { adUnitId } from '@/constants/addUnitId';
 
 export default function CrearIngresos() {
   const [amount, setAmount] = useState('');
@@ -27,6 +30,11 @@ export default function CrearIngresos() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
+  const bannerRef = useRef<BannerAd>(null);
+
+  useForeground(() => {
+    Platform.OS === 'ios' && bannerRef.current?.load();
+  });
 
   const loadCategories = useCallback(async () => {
     try {
@@ -72,11 +80,13 @@ export default function CrearIngresos() {
     try {
       await insertIncome(parsedAmount, description, fechaFormateada, selectedCategory.id);
       Alert.alert("¡Éxito!", "Ingreso registrado correctamente.", [
-        { text: "OK", onPress: () => {
-          setAmount('');
-          setDescription('');
-          setSelectedCategory(null);
-        }}
+        {
+          text: "OK", onPress: () => {
+            setAmount('');
+            setDescription('');
+            setSelectedCategory(null);
+          }
+        }
       ]);
     } catch (error) {
       Alert.alert("Error", "No se pudo registrar el ingreso.");
@@ -92,20 +102,17 @@ export default function CrearIngresos() {
           setModalCategoryVisible(false);
         }}
         activeOpacity={0.7}
-        className={`rounded-2xl p-4 mb-2 flex-row items-center ${
-          isSelected
+        className={`rounded-2xl p-4 mb-2 flex-row items-center ${isSelected
             ? 'bg-green-100 border-2 border-green-600'
             : 'bg-gray-50 border-2 border-transparent'
-        }`}
+          }`}
       >
-        <View className={`p-3 rounded-full ${
-          isSelected ? 'bg-green-200' : 'bg-gray-200'
-        }`}>
+        <View className={`p-3 rounded-full ${isSelected ? 'bg-green-200' : 'bg-gray-200'
+          }`}>
           <MaterialIcons name={item.icon as any} size={24} color={isSelected ? '#10B981' : '#6B7280'} />
         </View>
-        <Text className={`ml-3 text-base font-semibold ${
-          isSelected ? 'text-green-700' : 'text-gray-800'
-        }`}>
+        <Text className={`ml-3 text-base font-semibold ${isSelected ? 'text-green-700' : 'text-gray-800'
+          }`}>
           {item.name}
         </Text>
         {isSelected && (
@@ -119,6 +126,13 @@ export default function CrearIngresos() {
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
         {/* Header */}
+        <View className="bg-white dark:bg-gray-800 items-center py-2">
+          <BannerAd
+            ref={bannerRef}
+            unitId={adUnitId}
+            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          />
+        </View>
         <View className="bg-green-600 dark:bg-green-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">
             <View className="bg-white/20 p-3 rounded-full">

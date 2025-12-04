@@ -1,6 +1,6 @@
 // app/Egresos/ListarEgresos.tsx
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Alert, ScrollView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { parse, format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -8,7 +8,8 @@ import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchExpenses, fetchExpensesByDate, softDeleteExpense } from '../../DataBase/TablaEgresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
+import { adUnitId } from '@/constants/addUnitId';
 
 interface Expense {
   id: number;
@@ -28,6 +29,13 @@ export default function ListarEgresos() {
   const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
+  const bannerRef = useRef<BannerAd>(null);
+
+  // (iOS) WKWebView can terminate if app is in a "suspended state", resulting in an empty banner when app returns to foreground.
+  // Therefore it's advised to "manually" request a new ad when the app is foregrounded.
+  useForeground(() => {
+    Platform.OS === 'ios' && bannerRef.current?.load();
+  });
 
   useEffect(() => {
     const load = async () => {
@@ -284,14 +292,12 @@ export default function ListarEgresos() {
         }
       />
 
-      {/* Banner fijo al final - AGREGAR ESTO */}
+      {/* Banner fijo al final */}
       <View className="bg-white dark:bg-gray-800 items-center py-2">
         <BannerAd
-          unitId={TestIds.BANNER}
-          size={BannerAdSize.BANNER}
-          requestOptions={{
-            requestNonPersonalizedAdsOnly: true,
-          }}
+          ref={bannerRef}
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
         />
       </View>
 
