@@ -169,7 +169,7 @@ export default function ListarIngresos() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <View className="bg-green-600 dark:bg-green-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
@@ -287,7 +287,7 @@ export default function ListarIngresos() {
       {/* Botón flotante */}
       <View className="absolute bottom-4 right-4 left-4">
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.push('/Ingresos/CrearIngreso' as any)}
           activeOpacity={0.9}
           className="bg-green-600 dark:bg-green-700 py-3 rounded-xl shadow-lg flex-row items-center justify-center"
         >

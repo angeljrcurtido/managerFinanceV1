@@ -169,7 +169,7 @@ export default function ListarEgresos() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <View className="bg-red-600 dark:bg-red-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
@@ -287,7 +287,7 @@ export default function ListarEgresos() {
       {/* Botón flotante */}
       <View className="absolute bottom-4 right-4 left-4">
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.push('/Egresos/CrearEgresos' as any)}
           activeOpacity={0.9}
           className="bg-red-600 dark:bg-red-700 py-3 rounded-xl shadow-lg flex-row items-center justify-center"
         >
