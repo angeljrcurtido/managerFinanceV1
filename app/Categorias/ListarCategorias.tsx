@@ -48,7 +48,7 @@ export default function ListarCategorias() {
   );
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-gray-900">
+    <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
       <View className="bg-purple-600 dark:bg-purple-800 pt-12 pb-6 px-6">
         <View className="flex-row items-center justify-between mb-4">
