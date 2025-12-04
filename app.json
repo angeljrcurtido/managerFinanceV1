@@ -41,7 +41,13 @@
           }
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-2555525398874365~2392057136"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
