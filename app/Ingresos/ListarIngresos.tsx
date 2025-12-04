@@ -8,8 +8,6 @@ import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchIncomes, fetchIncomesByDate, softDeleteIncome } from '../../DataBase/TablaIngresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
-import BannerTest from './testBanner';
 interface Income {
   id: number;
   amount: number;
@@ -18,7 +16,7 @@ interface Income {
   categoryId?: number;
   categoryName?: string;
 }
-const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
 export default function ListarIngresos() {
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
@@ -28,11 +26,6 @@ export default function ListarIngresos() {
   const [showFilters, setShowFilters] = useState(false);
 
   const router = useRouter();
-  const bannerRef = useRef<BannerAd>(null);
-
-  useForeground(() => {
-    Platform.OS === 'ios' && bannerRef.current?.load();
-  });
 
   useEffect(() => {
     const load = async () => {
@@ -177,18 +170,6 @@ export default function ListarIngresos() {
   return (
     <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-   
-         <BannerAd
-            unitId={adUnitId}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            requestOptions={{
-              networkExtras: {
-                collapsible: 'bottom',
-              },
-            }}
-          />
-          
-       <BannerTest/>
       <View className="bg-green-600 dark:bg-green-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">

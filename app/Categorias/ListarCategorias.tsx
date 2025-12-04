@@ -4,17 +4,9 @@ import { useRouter } from 'expo-router';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from './interface';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
-import { adUnitId } from '@/constants/addUnitId';
-
 export default function ListarCategorias() {
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
-  const bannerRef = useRef<BannerAd>(null);
-
-  useForeground(() => {
-    Platform.OS === 'ios' && bannerRef.current?.load();
-  });
 
   const loadCategories = async () => {
     try {
@@ -98,15 +90,6 @@ export default function ListarCategorias() {
           </View>
         }
       />
-
-      {/* Banner fijo al final */}
-      <View className="bg-white dark:bg-gray-800 items-center py-2">
-        <BannerAd
-          ref={bannerRef}
-          unitId={adUnitId}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
-      </View>
 
       {/* Botón flotante */}
       <View className="absolute bottom-6 right-6 left-6">

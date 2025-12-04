@@ -28,12 +28,6 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "react-native-google-mobile-ads",
-        {
-          "androidAppId": "ca-app-pub-2555525398874365~2392057136"
-        }
-      ],
       "expo-router",
       [
         "expo-splash-screen",

@@ -19,8 +19,6 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from '../Categorias/interface';
 import CustomDatePicker from '../../components/CustomDatePicker';
-import { BannerAd, BannerAdSize, useForeground } from 'react-native-google-mobile-ads';
-import { adUnitId } from '@/constants/addUnitId';
 
 export default function CrearEgresos() {
   const [amount, setAmount] = useState('');
@@ -30,11 +28,6 @@ export default function CrearEgresos() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
-  const bannerRef = useRef<BannerAd>(null);
-  
-  useForeground(() => {
-    Platform.OS === 'ios' && bannerRef.current?.load();
-  });
 
   const loadCategories = useCallback(async () => {
     try {
@@ -125,14 +118,6 @@ export default function CrearEgresos() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
-        {/* Banner fijo al final */}
-        <View className="bg-white dark:bg-gray-800 items-center py-2">
-          <BannerAd
-            ref={bannerRef}
-            unitId={adUnitId}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
         {/* Header */}
         <View className="bg-red-600 dark:bg-red-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">

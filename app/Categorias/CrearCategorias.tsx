@@ -4,19 +4,12 @@ import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, ScrollView, A
 import { useRouter } from 'expo-router';
 import { insertCategory } from '../../DataBase/TablaCategoria';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BannerAd, BannerAdSize, useForeground } from 'react-native-google-mobile-ads';
-import { adUnitId } from '@/constants/addUnitId';
 
 export default function CrearCategorias() {
   const [name, setName] = useState('');
   const [selectedIcon, setSelectedIcon] = useState<string>('shopping-cart');
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
-  const bannerRef = useRef<BannerAd>(null);
-
-  useForeground(() => {
-    Platform.OS === 'ios' && bannerRef.current?.load();
-  });
 
   const availableIcons = [
     'shopping-cart',
@@ -77,15 +70,6 @@ export default function CrearCategorias() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-        {/* Banner fijo al final */}
-        <View className="bg-white dark:bg-gray-800 items-center py-2">
-          <BannerAd
-            ref={bannerRef}
-            unitId={adUnitId}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
-
         {/* Header */}
         <View className="bg-purple-600 dark:bg-purple-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">

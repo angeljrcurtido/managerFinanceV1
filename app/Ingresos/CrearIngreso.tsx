@@ -125,14 +125,6 @@ export default function CrearIngresos() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
-        {/* Header */}
-        <View className="bg-white dark:bg-gray-800 items-center py-2">
-          <BannerAd
-            ref={bannerRef}
-            unitId={adUnitId}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-          />
-        </View>
         <View className="bg-green-600 dark:bg-green-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">
             <View className="bg-white/20 p-3 rounded-full">

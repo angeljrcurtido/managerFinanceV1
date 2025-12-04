@@ -292,15 +292,6 @@ export default function ListarEgresos() {
         }
       />
 
-      {/* Banner fijo al final */}
-      <View className="bg-white dark:bg-gray-800 items-center py-2">
-        <BannerAd
-          ref={bannerRef}
-          unitId={adUnitId}
-          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-        />
-      </View>
-
       {/* Botón flotante */}
       <View className="absolute bottom-4 right-4 left-4">
         <TouchableOpacity
