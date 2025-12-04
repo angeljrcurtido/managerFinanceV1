@@ -95,7 +95,7 @@ export default function ListarCategorias() {
       {/* Botón flotante */}
       <View className="absolute bottom-6 right-6 left-6">
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.push('/Categorias/ListarCategorias' as any)}
           activeOpacity={0.9}
           className="bg-purple-600 dark:bg-purple-700 py-4 rounded-2xl shadow-lg flex-row items-center justify-center"
         >
