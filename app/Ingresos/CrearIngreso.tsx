@@ -11,6 +11,7 @@ import {
   Alert,
   Platform
 } from 'react-native';
+import BannerAdsV1 from '@/components/BannerAdV1';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
@@ -125,6 +126,7 @@ export default function CrearIngresos() {
   return (
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
+        <BannerAdsV1 />
         <View className="bg-green-600 dark:bg-green-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">
             <View className="bg-white/20 p-3 rounded-full">

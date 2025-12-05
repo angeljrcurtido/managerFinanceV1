@@ -8,6 +8,7 @@ import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { fetchIncomes, fetchIncomesByDate, softDeleteIncome } from '../../DataBase/TablaIngresos';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
+import BannerAdsV1 from '@/components/BannerAdV1';
 interface Income {
   id: number;
   amount: number;
@@ -170,6 +171,7 @@ export default function ListarIngresos() {
   return (
     <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
+      <BannerAdsV1 />
       <View className="bg-green-600 dark:bg-green-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">

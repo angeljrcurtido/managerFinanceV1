@@ -12,7 +12,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.managerfinance.app",
+      "package": "com.angeljrcurtido.MiAppIngresos",
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -42,6 +42,12 @@
         }
       ],
       "expo-sqlite",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-2555525398874365~9792734697"
+        }
+      ]
     
     ],
     "experiments": {

@@ -10,6 +10,7 @@ import CustomDatePicker from '../../components/CustomDatePicker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BannerAd, BannerAdSize, TestIds, useForeground } from 'react-native-google-mobile-ads';
 import { adUnitId } from '@/constants/addUnitId';
+import BannerAdsV1 from '@/components/BannerAdV1';
 
 interface Expense {
   id: number;
@@ -181,6 +182,7 @@ export default function ListarEgresos() {
   return (
     <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
+      <BannerAdsV1 />
       <View className="bg-red-600 dark:bg-red-800 pt-10 pb-4 px-4">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">

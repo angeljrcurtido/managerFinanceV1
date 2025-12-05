@@ -4,6 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, Modal, FlatList, ScrollView, A
 import { useRouter } from 'expo-router';
 import { insertCategory } from '../../DataBase/TablaCategoria';
 import { MaterialIcons } from '@expo/vector-icons';
+import BannerAdsV1 from '@/components/BannerAdV1';
 
 export default function CrearCategorias() {
   const [name, setName] = useState('');
@@ -71,6 +72,7 @@ export default function CrearCategorias() {
     <View className="flex-1 bg-gray-50 dark:bg-gray-900">
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         {/* Header */}
+        <BannerAdsV1 />
         <View className="bg-purple-600 dark:bg-purple-800 pt-10 pb-6 px-4 rounded-b-[30px]">
           <View className="flex-row items-center mb-4">
             <View className="bg-white/20 p-3 rounded-full">

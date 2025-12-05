@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { fetchCategories } from '../../DataBase/TablaCategoria';
 import { Category } from './interface';
 import { MaterialIcons } from '@expo/vector-icons';
+import BannerAdsV1 from '@/components/BannerAdV1';
 export default function ListarCategorias() {
   const [categories, setCategories] = useState<Category[]>([]);
   const router = useRouter();
@@ -49,6 +50,7 @@ export default function ListarCategorias() {
   return (
     <View className="bg-gray-50 dark:bg-gray-900">
       {/* Header */}
+      <BannerAdsV1 />
       <View className="bg-purple-600 dark:bg-purple-800 pt-12 pb-6 px-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-1">
